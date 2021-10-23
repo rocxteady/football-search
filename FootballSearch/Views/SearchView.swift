@@ -14,7 +14,7 @@ struct SearchView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                if !viewModel.searchedText.isEmpty && viewModel.isSearchResultEmpty {
+                if viewModel.shouldShowEmptyView {
                     Text("No Result")
                 } else {
                     List {
@@ -35,7 +35,7 @@ struct SearchView: View {
                     }
                 }
             }
-            .searchable(text: $viewModel.searchedText)
+            .searchable(text: $viewModel.searchedTextListener.searchedText)
             .navigationTitle("Football Search")
         }
     }
