@@ -11,5 +11,8 @@ struct FootballData {
     
     var players: [Player]
     var teams: [Team]
+    var isEmpty: Bool {
+        return players.isEmpty && teams.isEmpty
+    }
     
 }

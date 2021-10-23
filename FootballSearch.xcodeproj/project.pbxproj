@@ -19,6 +19,8 @@
 		7CD198E627243813007FE4F6 /* FootballData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD198E527243813007FE4F6 /* FootballData.swift */; };
 		7CD198E8272439BF007FE4F6 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD198E7272439BF007FE4F6 /* PlayerView.swift */; };
 		7CD198EA27243AE7007FE4F6 /* TeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD198E927243AE7007FE4F6 /* TeamView.swift */; };
+		7CD198EC27243CD5007FE4F6 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD198EB27243CD5007FE4F6 /* SearchViewModel.swift */; };
+		7CD198EE27244244007FE4F6 /* SearchedTextListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD198ED27244244007FE4F6 /* SearchedTextListener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		7CD198E527243813007FE4F6 /* FootballData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballData.swift; sourceTree = "<group>"; };
 		7CD198E7272439BF007FE4F6 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		7CD198E927243AE7007FE4F6 /* TeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamView.swift; sourceTree = "<group>"; };
+		7CD198EB27243CD5007FE4F6 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		7CD198ED27244244007FE4F6 /* SearchedTextListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedTextListener.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,17 +72,15 @@
 		7CD198CA2724350A007FE4F6 /* FootballSearch */ = {
 			isa = PBXGroup;
 			children = (
+				7CD198D42724350B007FE4F6 /* Persistence.swift */,
+				7CD198ED27244244007FE4F6 /* SearchedTextListener.swift */,
 				7CD198DE27243526007FE4F6 /* FootballSearch.entitlements */,
 				7CD198CB2724350A007FE4F6 /* FootballSearchApp.swift */,
 				7CD198CD2724350A007FE4F6 /* ContentView.swift */,
-				7CD198DF2724359E007FE4F6 /* SearchView.swift */,
-				7CD198E7272439BF007FE4F6 /* PlayerView.swift */,
-				7CD198E927243AE7007FE4F6 /* TeamView.swift */,
-				7CD198E527243813007FE4F6 /* FootballData.swift */,
-				7CD198E1272437CE007FE4F6 /* Player.swift */,
-				7CD198E3272437EC007FE4F6 /* Team.swift */,
+				7CD198EF2724580C007FE4F6 /* Models */,
+				7CD198F027245820007FE4F6 /* ViewModels */,
+				7CD198F12724582C007FE4F6 /* Views */,
 				7CD198CF2724350B007FE4F6 /* Assets.xcassets */,
-				7CD198D42724350B007FE4F6 /* Persistence.swift */,
 				7CD198D62724350B007FE4F6 /* FootballSearch.xcdatamodeld */,
 				7CD198D12724350B007FE4F6 /* Preview Content */,
 			);
@@ -91,6 +93,34 @@
 				7CD198D22724350B007FE4F6 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7CD198EF2724580C007FE4F6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7CD198E527243813007FE4F6 /* FootballData.swift */,
+				7CD198E1272437CE007FE4F6 /* Player.swift */,
+				7CD198E3272437EC007FE4F6 /* Team.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7CD198F027245820007FE4F6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7CD198EB27243CD5007FE4F6 /* SearchViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		7CD198F12724582C007FE4F6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7CD198DF2724359E007FE4F6 /* SearchView.swift */,
+				7CD198E7272439BF007FE4F6 /* PlayerView.swift */,
+				7CD198E927243AE7007FE4F6 /* TeamView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,8 +193,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CD198EC27243CD5007FE4F6 /* SearchViewModel.swift in Sources */,
 				7CD198E8272439BF007FE4F6 /* PlayerView.swift in Sources */,
 				7CD198E627243813007FE4F6 /* FootballData.swift in Sources */,
+				7CD198EE27244244007FE4F6 /* SearchedTextListener.swift in Sources */,
 				7CD198E02724359E007FE4F6 /* SearchView.swift in Sources */,
 				7CD198D82724350B007FE4F6 /* FootballSearch.xcdatamodeld in Sources */,
 				7CD198E4272437EC007FE4F6 /* Team.swift in Sources */,
