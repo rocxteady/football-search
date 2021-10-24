@@ -7,12 +7,21 @@
 
 import Foundation
 
-struct Player: Identifiable {
+struct Player: Decodable, Identifiable {
     
-    let id: String
-    let name: String
-    let age: String
-    let club: String
+    var id: String {
+        return playerID
+    }
+    
+    let playerID: String
+    let playerFirstName: String
+    let playerSecondName: String
+    let playerAge: String
+    let playerClub: String
+    
+    var playerName: String {
+        return playerFirstName + playerSecondName
+    }
     
 }
 

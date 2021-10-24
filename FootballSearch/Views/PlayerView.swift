@@ -14,10 +14,10 @@ struct PlayerView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(player.name)
+                Text(player.playerName)
                 HStack(spacing: 32) {
-                    Text("Age " + player.age)
-                    Text("Club " + player.club)
+                    Text("Age " + player.playerAge)
+                    Text("Club " + player.playerClub)
                 }
             }
             Spacer()
@@ -27,6 +27,6 @@ struct PlayerView: View {
 
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerView(player: Player(id: "0", name: "Ulaş", age: "33", club: "Trabzonspor"))
+        PlayerView(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak"))
     }
 }

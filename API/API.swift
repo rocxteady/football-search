@@ -13,8 +13,8 @@ public typealias APIResponseCompletion<T: Decodable> = (APIResponse<T>) -> ()
 public protocol API {
     associatedtype ResponseModel: Decodable
     associatedtype RequestModel: Encodable
-    var uri: String { get set }
-    var endpoint: RestEndpoint { get set }
+    var uri: String { get }
+    var endpoint: RestEndpoint { get }
     func start(completion: @escaping APIResponseCompletion<ResponseModel>)
     func end()
 }

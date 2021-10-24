@@ -7,9 +7,9 @@
 
 import Foundation
 
-protocol BaseResult: Decodable {
+public protocol BaseResult: Decodable {
     
-    var error: Bool { get }
+    var status: Bool { get }
     var message: String { get }
     
 }

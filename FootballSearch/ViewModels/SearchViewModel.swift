@@ -37,9 +37,21 @@ class SearchViewMdoel: ObservableObject {
         }
         .store(in: &cancellables)
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            self.data = FootballData(players: [Player(id: "0", name: "Ulas", age: "33", club: "Sancak"),
-                                              Player(id: "0", name: "Ulas", age: "33", club: "Sancak")], teams: [Team(id: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş")])
+            self.data = FootballData(players: [Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak"),
+                                              Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak")], teams: [Team(id: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş")])
         }
+        let api = try! PlayerSearchAPI(requestModel: SearchRequestModel(searchString: "milan", searchType: "players", offset: 0))
+        api.publish_start().sink { completion in
+            switch completion {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .finished:
+                print("finished")
+            }
+        } receiveValue: { response in
+            print(response)
+        }.store(in: &cancellables)
+
     }
     
 }
