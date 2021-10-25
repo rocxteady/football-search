@@ -7,10 +7,11 @@
 
 import Combine
 import API
+import RestClient
 
 extension Publishers {
     
-    struct APISubscription<S: Subscriber, T: API>: Subscription where S.Input == Decodable, S.Failure == Error {
+    struct APISubscription<S: Subscriber, T: API>: Subscription where S.Input == T.ResponseModel, S.Failure == Error {
         
         let combineIdentifier = CombineIdentifier()
         private let api: T
@@ -34,9 +35,11 @@ extension Publishers {
             api.start { response in
                 if let error = response.error {
                     subscriber.receive(completion: .failure(error))
-                } else {
-                    _ = subscriber.receive(response.responseModel)
+                } else if let responseModel = response.responseModel {
+                    _ = subscriber.receive(responseModel)
                     subscriber.receive(completion: .finished)
+                } else {
+                    subscriber.receive(completion: .failure(RestError.unknown))
                 }
             }
         }
@@ -45,13 +48,13 @@ extension Publishers {
     
     struct APIPublisher<T: API>: Publisher {
         
-        typealias Output = Decodable
+        typealias Output = T.ResponseModel
         
         typealias Failure = Error
         
         let api: T
         
-        func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, Decodable == S.Input {
+        func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, T.ResponseModel == S.Input {
             let subscription = Publishers.APISubscription(api:api, subscriber: subscriber)
             subscriber.receive(subscription: subscription)
         }

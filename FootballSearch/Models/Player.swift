@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import API
 
-struct Player: Decodable, Identifiable {
+struct Player: APIIdentifiable, Identifiable {
     
     var id: String {
         return playerID

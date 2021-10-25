@@ -14,9 +14,9 @@ struct TeamView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(team.name)
-                Text("City " + team.city)
-                Text("Stadium " + team.stadium)
+                Text(team.teamName)
+                Text("City " + team.teamCity)
+                Text("Stadium " + team.teamStadium)
             }
             Spacer()
         }
@@ -25,6 +25,6 @@ struct TeamView: View {
 
 struct TeamView_Previews: PreviewProvider {
     static var previews: some View {
-        TeamView(team: Team(id: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş"))
+        TeamView(team: Team(teamID: "0", teamName: "Trabzonspor", teamCity: "Trabzon", teamStadium: "Şenol Güneş"))
     }
 }

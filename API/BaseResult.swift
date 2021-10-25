@@ -7,8 +7,15 @@
 
 import Foundation
 
+public protocol APIIdentifiable: Decodable {
+    
+    var id: String { get }
+    
+}
+
 public protocol BaseResult: Decodable {
     
+    var data: [APIIdentifiable] { get }
     var status: Bool { get }
     var message: String { get }
     

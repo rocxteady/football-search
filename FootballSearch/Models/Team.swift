@@ -6,12 +6,17 @@
 //
 
 import Foundation
+import API
 
-struct Team: Identifiable {
+struct Team: APIIdentifiable, Identifiable {
     
-    let id: String
-    let name :String
-    let city: String
-    let stadium :String
+    var id: String {
+        return teamID
+    }
+    
+    let teamID: String
+    let teamName :String
+    let teamCity: String
+    let teamStadium :String
     
 }

@@ -14,6 +14,11 @@ class SearchViewMdoel: ObservableObject {
     @Published var data: FootballData = FootballData(players: [], teams: [])
     @ObservedObject var searchedTextListener = SearchedTextListener()
     private var cancellables: Set<AnyCancellable> = []
+    private var searchCancellable: AnyCancellable? {
+        willSet {
+            searchCancellable?.cancel()
+        }
+    }
     
     var shouldShowEmptyView: Bool {
         !searchedTextListener.debouncedText.isEmpty && isSearchResultEmpty
@@ -31,27 +36,32 @@ class SearchViewMdoel: ObservableObject {
         data.teams.isEmpty
     }
     
-    init() {
-        searchedTextListener.$debouncedText.sink { text in
-            print("Text")
+    func search(searchText: String) {
+        guard !searchText.isEmpty else {
+            data.players = []
+            data.teams = []
+            return
         }
-        .store(in: &cancellables)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            self.data = FootballData(players: [Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak"),
-                                              Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak")], teams: [Team(id: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş")])
-        }
-        let api = try! PlayerSearchAPI(requestModel: SearchRequestModel(searchString: "milan", searchType: "players", offset: 0))
-        api.publish_start().sink { completion in
+        let playersSearchAPI = try! SearchAPI<PlayersResult>(requestModel: SearchRequestModel(searchString: searchText, searchType: .players, offset: 0))
+        let teamsSearchAPI = try! SearchAPI<TeamsResult>(requestModel: SearchRequestModel(searchString: searchText, searchType: .teams, offset: 0))
+        searchCancellable = playersSearchAPI.publish_start().zip(teamsSearchAPI.publish_start()).sink { completion in
             switch completion {
             case .failure(let error):
                 print(error.localizedDescription)
             case .finished:
-                print("finished")
+                print("Fisined")
             }
-        } receiveValue: { response in
-            print(response)
-        }.store(in: &cancellables)
-
+        } receiveValue: { [weak self] (playersResponse, teamsResponse) in
+            self?.data.players = playersResponse.result.players
+            self?.data.teams = teamsResponse.result.teams
+        }
+    }
+    
+    init() {
+        searchedTextListener.$debouncedText.sink { [weak self] text in
+            self?.search(searchText: text)
+        }
+        .store(in: &cancellables)
     }
     
 }
