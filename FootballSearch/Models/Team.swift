@@ -11,7 +11,7 @@ import API
 struct Team: APIIdentifiable, Identifiable {
     
     var id: String {
-        return teamID
+        teamID
     }
     
     let teamID: String

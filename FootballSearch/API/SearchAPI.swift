@@ -14,52 +14,22 @@ enum SearchType: String, Encodable {
     case teams
 }
 
-struct BaseResponse<T: BaseResult>: Decodable {
+struct BaseResponse<T: APIIdentifiable>: Decodable {
     
-    let result: T
+    let result: CommonResult<T>
     
 }
 
-struct PlayersResult: BaseResult {
-    
-    var data: [APIIdentifiable] {
-        return players
-    }
-    
-    let players: [Player]
+struct CommonResult<T: APIIdentifiable>: BaseResult {
     
     let status: Bool
     
     let message: String
     
+    let data: [T]
+        
     enum CodingKeys: String, CodingKey {
         case players
-        case status
-        case message
-    }
-    
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        players = try values.decodeIfPresent([Player].self, forKey: .players) ?? []
-        status = try values.decode(Bool.self, forKey: .status)
-        message = try values.decode(String.self, forKey: .message)
-    }
-    
-}
-
-struct TeamsResult: BaseResult {
-    
-    var data: [APIIdentifiable] {
-        return teams
-    }
-    
-    let teams: [Team]
-    
-    let status: Bool
-    
-    let message: String
-    
-    enum CodingKeys: String, CodingKey {
         case teams
         case status
         case message
@@ -67,24 +37,36 @@ struct TeamsResult: BaseResult {
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        teams = try values.decodeIfPresent([Team].self, forKey: .teams) ?? []
+        if T.self == Player.self {
+            data = try values.decodeIfPresent([T].self, forKey: .players) ?? []
+        } else if T.self == Team.self {
+            data = try values.decodeIfPresent([T].self, forKey: .teams) ?? []
+        } else {
+            data = []
+        }
         status = try values.decode(Bool.self, forKey: .status)
         message = try values.decode(String.self, forKey: .message)
     }
     
 }
 
+
 struct SearchRequestModel: Encodable {
     
     let searchString: String
-    
-    let searchType: SearchType
-    
+        
     let offset: Int
+    
+    fileprivate var searchType: SearchType = .players
+    
+    init(searchString: String, offset: Int) {
+        self.searchString = searchString
+        self.offset = offset
+    }
     
 }
 
-struct SearchAPI<T: BaseResult>: API {
+struct SearchAPI<T: APIIdentifiable>: API {
     
     let uri = "/search"
     
@@ -95,6 +77,10 @@ struct SearchAPI<T: BaseResult>: API {
     typealias RequestModel = SearchRequestModel
     
     init(requestModel: RequestModel) throws {
+        var requestModel = requestModel
+        if T.self == Team.self {
+            requestModel.searchType = .teams
+        }
         endpoint = RestEndpoint(urlString: Properties.baseURL + uri, parameters: try requestModel.toDictionary())
     }
     

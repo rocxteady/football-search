@@ -11,7 +11,7 @@ import API
 struct Player: APIIdentifiable, Identifiable {
     
     var id: String {
-        return playerID
+        playerID
     }
     
     let playerID: String
@@ -21,7 +21,7 @@ struct Player: APIIdentifiable, Identifiable {
     let playerClub: String
     
     var playerName: String {
-        return playerFirstName + playerSecondName
+        playerFirstName + playerSecondName
     }
     
 }

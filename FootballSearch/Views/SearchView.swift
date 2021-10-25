@@ -18,20 +18,37 @@ struct SearchView: View {
                     Text("No Result")
                 } else {
                     List {
-                        if !viewModel.data.players.isEmpty {
+                        if !viewModel.isPlayersEmpty {
                             Section("Players") {
-                                ForEach (viewModel.data.players) { player in
+                                ForEach (viewModel.players) { player in
                                     PlayerView(player: player)
                                 }
-                            }
-                        }
-                        if !viewModel.data.teams.isEmpty {
-                            Section("Teams") {
-                                ForEach (viewModel.data.teams) { team in
-                                    TeamView(team: team)
+                                HStack {
+                                    Spacer()
+                                    Button("More") {
+                                        viewModel.morePlayers()
+                                    }
+                                    Spacer()
                                 }
                             }
                         }
+                        if !viewModel.isTeamsEmpty {
+                            Section("Teams") {
+                                ForEach (viewModel.teams) { team in
+                                    TeamView(team: team)
+                                }
+                                HStack {
+                                    Spacer()
+                                    Button("More") {
+                                        viewModel.moreTeams()
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
+                    }
+                    if viewModel.isBusy {
+                        ProgressView()
                     }
                 }
             }

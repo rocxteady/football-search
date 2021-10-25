@@ -15,7 +15,6 @@ public protocol APIIdentifiable: Decodable {
 
 public protocol BaseResult: Decodable {
     
-    var data: [APIIdentifiable] { get }
     var status: Bool { get }
     var message: String { get }
     

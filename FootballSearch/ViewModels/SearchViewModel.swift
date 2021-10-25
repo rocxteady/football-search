@@ -11,55 +11,64 @@ import SwiftUI
 
 class SearchViewMdoel: ObservableObject {
     
-    @Published var data: FootballData = FootballData(players: [], teams: [])
+    @ObservedObject private var playersViewModel = FootballListViewModel<Player>()
+    @ObservedObject private var teamsViewModel = FootballListViewModel<Team>()
     @ObservedObject var searchedTextListener = SearchedTextListener()
+
+    @Published var players: [Player] = []
+    @Published var teams: [Team] = []
+    @Published var isBusy = false
+    
     private var cancellables: Set<AnyCancellable> = []
-    private var searchCancellable: AnyCancellable? {
-        willSet {
-            searchCancellable?.cancel()
-        }
-    }
     
     var shouldShowEmptyView: Bool {
-        !searchedTextListener.debouncedText.isEmpty && isSearchResultEmpty
+        !searchedTextListener.debouncedText.isEmpty && isSearchResultEmpty && !isBusy
     }
     
     var isSearchResultEmpty: Bool {
-        data.isEmpty
+        isPlayersEmpty && isTeamsEmpty
     }
     
     var isPlayersEmpty: Bool {
-        data.players.isEmpty
+        playersViewModel.isDataEmpty
     }
     
     var isTeamsEmpty: Bool {
-        data.teams.isEmpty
+        teamsViewModel.isDataEmpty
     }
     
-    func search(searchText: String) {
-        guard !searchText.isEmpty else {
-            data.players = []
-            data.teams = []
-            return
-        }
-        let playersSearchAPI = try! SearchAPI<PlayersResult>(requestModel: SearchRequestModel(searchString: searchText, searchType: .players, offset: 0))
-        let teamsSearchAPI = try! SearchAPI<TeamsResult>(requestModel: SearchRequestModel(searchString: searchText, searchType: .teams, offset: 0))
-        searchCancellable = playersSearchAPI.publish_start().zip(teamsSearchAPI.publish_start()).sink { completion in
-            switch completion {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .finished:
-                print("Fisined")
-            }
-        } receiveValue: { [weak self] (playersResponse, teamsResponse) in
-            self?.data.players = playersResponse.result.players
-            self?.data.teams = teamsResponse.result.teams
-        }
+    func searchPlayers(searchText: String, shouldReset: Bool = true) {
+        playersViewModel.search(searchText: searchText, shouldReset: shouldReset)
+    }
+    
+    func searchTeams(searchText: String, shouldReset: Bool = true) {
+        teamsViewModel.search(searchText: searchText, shouldReset: shouldReset)
+    }
+    
+    func morePlayers() {
+        searchPlayers(searchText: searchedTextListener.debouncedText, shouldReset: false)
+    }
+    
+    func moreTeams() {
+        searchTeams(searchText: searchedTextListener.debouncedText, shouldReset: false)
     }
     
     init() {
         searchedTextListener.$debouncedText.sink { [weak self] text in
-            self?.search(searchText: text)
+            self?.searchPlayers(searchText: text)
+            self?.searchTeams(searchText: text)
+        }
+        .store(in: &cancellables)
+        playersViewModel.$data.sink { [weak self] data in
+            self?.players = data
+        }
+        .store(in: &cancellables)
+        teamsViewModel.$data.sink { [weak self] data in
+            self?.teams = data
+        }
+        .store(in: &cancellables)
+        playersViewModel.$isBusy.sink { [weak self] isBusy in
+            self?.isBusy = isBusy
         }
         .store(in: &cancellables)
     }
