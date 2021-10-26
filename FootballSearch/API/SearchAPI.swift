@@ -36,16 +36,16 @@ struct CommonResult<T: APIIdentifiable>: BaseResult {
     }
     
     init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         if T.self == Player.self {
-            data = try values.decodeIfPresent([T].self, forKey: .players) ?? []
+            data = try container.decodeIfPresent([T].self, forKey: .players) ?? []
         } else if T.self == Team.self {
-            data = try values.decodeIfPresent([T].self, forKey: .teams) ?? []
+            data = try container.decodeIfPresent([T].self, forKey: .teams) ?? []
         } else {
             data = []
         }
-        status = try values.decode(Bool.self, forKey: .status)
-        message = try values.decode(String.self, forKey: .message)
+        status = try container.decode(Bool.self, forKey: .status)
+        message = try container.decode(String.self, forKey: .message)
     }
     
 }

@@ -53,6 +53,34 @@ class SearchViewMdoel: ObservableObject {
         searchTeams(searchText: searchedTextListener.debouncedText, shouldReset: false)
     }
     
+    func handleFavorite(player: Player) {
+        do {
+            if player.favorited {
+                try FavoritesViewModel.shared.removePlayer(player: player)
+                player.favorited = false
+            } else {
+                try FavoritesViewModel.shared.add(player: player)
+                player.favorited = true
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func handleFavorite(team: Team) {
+        do {
+            if team.favorited {
+                try FavoritesViewModel.shared.removeTeam(team: team)
+                team.favorited = false
+            } else {
+                try FavoritesViewModel.shared.add(team: team)
+                team.favorited = true
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     init() {
         searchedTextListener.$debouncedText.sink { [weak self] text in
             self?.searchPlayers(searchText: text)

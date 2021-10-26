@@ -21,7 +21,9 @@ struct SearchView: View {
                         if !viewModel.isPlayersEmpty {
                             Section("Players") {
                                 ForEach (viewModel.players) { player in
-                                    PlayerView(player: player)
+                                    PlayerView(player: player) {
+                                        viewModel.handleFavorite(player: player)
+                                    }
                                 }
                                 HStack {
                                     Spacer()
@@ -35,7 +37,9 @@ struct SearchView: View {
                         if !viewModel.isTeamsEmpty {
                             Section("Teams") {
                                 ForEach (viewModel.teams) { team in
-                                    TeamView(team: team)
+                                    TeamView(team: team) {
+                                        viewModel.handleFavorite(team: team)
+                                    }
                                 }
                                 HStack {
                                     Spacer()

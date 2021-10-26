@@ -44,8 +44,17 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
             }
             self?.isBusy = false
         } receiveValue: { [weak self] (response) in
+            let data = response.result.data
+            data.forEach { object in
+                if let player = object as? Player {
+                    player.favorited = FavoritesViewModel.shared.isFavorited(player: player)
+                } else if let team = object as? Team {
+                    team.favorited = FavoritesViewModel.shared.isFavorited(team: team)
+                }
+            }
             if shouldReset {
                 self?.data = response.result.data
+                try! PersistenceController.shared.container.viewContext.save()
             } else {
                 self?.data.append(contentsOf: response.result.data)
             }

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct PlayerView: View {
     
-    let player: Player
+    @ObservedObject var player: Player
+    let action: () -> Void
     
     var body: some View {
         HStack {
@@ -21,12 +22,15 @@ struct PlayerView: View {
                 }
             }
             Spacer()
+            Button(action: action, label: {
+                Image(systemName: player.favorited ? "heart.fill" : "heart")
+            })
         }
     }
 }
 
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerView(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak"))
+        PlayerView(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak"), action: {})
     }
 }
