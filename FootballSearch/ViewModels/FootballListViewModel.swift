@@ -14,6 +14,7 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
     
     @Published var data: [T] = []
     @Published var isBusy = false
+    
     private var offset = -10
     private var searchCancellable: AnyCancellable? {
         willSet {
@@ -23,6 +24,18 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
     
     var isDataEmpty: Bool {
         data.isEmpty
+    }
+    
+    var handleError: (_ error: String) -> Void = { _ in }
+    
+    func reloadData() {
+        data.forEach { object in
+            if let player = object as? Player {
+                player.favorited = FavoritesViewModel.shared.isFavorited(player: player)
+            } else if let team = object as? Team {
+                team.favorited = FavoritesViewModel.shared.isFavorited(team: team)
+            }
+        }
     }
     
     func search(searchText: String, shouldReset: Bool = true) {
@@ -38,7 +51,7 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
         searchCancellable = searchAPI.publish_start().sink { [weak self] completion in
             switch completion {
             case .failure(let error):
-                print(error.localizedDescription)
+                self?.handleError(error.localizedDescription)
             case .finished:
                 self?.offset += 10
             }
@@ -53,8 +66,7 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
                 }
             }
             if shouldReset {
-                self?.data = response.result.data
-                try! PersistenceController.shared.container.viewContext.save()
+                self?.data = data
             } else {
                 self?.data.append(contentsOf: response.result.data)
             }

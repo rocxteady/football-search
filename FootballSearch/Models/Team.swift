@@ -8,27 +8,35 @@
 import Foundation
 import API
 
-class Team: ObservableObject, APIIdentifiable, Identifiable {
+protocol TeamProtocol {
+    
+    var name :String { get }
+    var city: String { get }
+    var stadium: String { get }
+    
+}
+
+class Team: ObservableObject, APIIdentifiable, TeamProtocol, Identifiable {
     
     var id: String {
         teamID
     }
     
     let teamID: String
-    let teamName :String
-    let teamCity: String
-    let teamStadium :String
+    let name :String
+    let city: String
+    let stadium :String
     
     @Published var favorited: Bool = false
     
     init(teamID: String,
-         teamName: String,
-         teamCity: String,
-         teamStadium: String) {
+         name: String,
+         city: String,
+         stadium: String) {
         self.teamID = teamID
-        self.teamName = teamName
-        self.teamCity = teamCity
-        self.teamStadium = teamStadium
+        self.name = name
+        self.city = city
+        self.stadium = stadium
     }
     
     enum CodingKeys: String, CodingKey {
@@ -41,9 +49,9 @@ class Team: ObservableObject, APIIdentifiable, Identifiable {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         teamID = try container.decode(String.self, forKey: .teamID)
-        teamName = try container.decode(String.self, forKey: .teamName)
-        teamCity = try container.decode(String.self, forKey: .teamCity)
-        teamStadium = try container.decode(String.self, forKey: .teamStadium)
+        name = try container.decode(String.self, forKey: .teamName)
+        city = try container.decode(String.self, forKey: .teamCity)
+        stadium = try container.decode(String.self, forKey: .teamStadium)
     }
     
 }
@@ -53,9 +61,25 @@ extension TeamEntity {
     convenience init(team: Team) {
         self.init(context: PersistenceController.shared.container.viewContext)
         teamID = team.teamID
-        teamName = team.teamName
-        teamCity = team.teamCity
-        teamStadium = team.teamStadium
+        teamName = team.name
+        teamCity = team.city
+        teamStadium = team.stadium
+    }
+    
+}
+
+extension TeamEntity: TeamProtocol {
+    
+    var name: String {
+        teamName ?? ""
+    }
+    
+    var city: String {
+        teamCity ?? ""
+    }
+    
+    var stadium: String {
+        teamStadium ?? ""
     }
     
 }

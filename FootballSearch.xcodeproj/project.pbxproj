@@ -12,6 +12,9 @@
 		7C6536922728AD7700EF5594 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6536912728AD7700EF5594 /* FavoritesViewModel.swift */; };
 		7C7CD3B42724B3C00060C675 /* API+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CD3B32724B3C00060C675 /* API+Publisher.swift */; };
 		7C83728327260D8F0043EE75 /* FootballListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C83728227260D8F0043EE75 /* FootballListViewModel.swift */; };
+		7CCA8C3F2729497A00F88DE7 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCA8C3E2729497A00F88DE7 /* FavoritesView.swift */; };
+		7CCA8C4127294F6A00F88DE7 /* PlayerFavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCA8C4027294F6A00F88DE7 /* PlayerFavoriteButton.swift */; };
+		7CCA8C4327294FF600F88DE7 /* TeamFavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCA8C4227294FF600F88DE7 /* TeamFavoriteButton.swift */; };
 		7CD198CC2724350A007FE4F6 /* FootballSearchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD198CB2724350A007FE4F6 /* FootballSearchApp.swift */; };
 		7CD198CE2724350A007FE4F6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD198CD2724350A007FE4F6 /* ContentView.swift */; };
 		7CD198D02724350B007FE4F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CD198CF2724350B007FE4F6 /* Assets.xcassets */; };
@@ -135,6 +138,9 @@
 		7C6536912728AD7700EF5594 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		7C7CD3B32724B3C00060C675 /* API+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+Publisher.swift"; sourceTree = "<group>"; };
 		7C83728227260D8F0043EE75 /* FootballListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootballListViewModel.swift; sourceTree = "<group>"; };
+		7CCA8C3E2729497A00F88DE7 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		7CCA8C4027294F6A00F88DE7 /* PlayerFavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFavoriteButton.swift; sourceTree = "<group>"; };
+		7CCA8C4227294FF600F88DE7 /* TeamFavoriteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamFavoriteButton.swift; sourceTree = "<group>"; };
 		7CD198C82724350A007FE4F6 /* FootballSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CD198CB2724350A007FE4F6 /* FootballSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballSearchApp.swift; sourceTree = "<group>"; };
 		7CD198CD2724350A007FE4F6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -301,8 +307,11 @@
 			isa = PBXGroup;
 			children = (
 				7CD198DF2724359E007FE4F6 /* SearchView.swift */,
+				7CCA8C3E2729497A00F88DE7 /* FavoritesView.swift */,
 				7CD198E7272439BF007FE4F6 /* PlayerView.swift */,
+				7CCA8C4027294F6A00F88DE7 /* PlayerFavoriteButton.swift */,
 				7CD198E927243AE7007FE4F6 /* TeamView.swift */,
+				7CCA8C4227294FF600F88DE7 /* TeamFavoriteButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -581,15 +590,18 @@
 				7CD198E8272439BF007FE4F6 /* PlayerView.swift in Sources */,
 				7CD198EE27244244007FE4F6 /* SearchedTextListener.swift in Sources */,
 				7CD198E02724359E007FE4F6 /* SearchView.swift in Sources */,
+				7CCA8C4327294FF600F88DE7 /* TeamFavoriteButton.swift in Sources */,
 				7CD198D82724350B007FE4F6 /* FootballSearch.xcdatamodeld in Sources */,
 				7CD198E4272437EC007FE4F6 /* Team.swift in Sources */,
 				7CD198D52724350B007FE4F6 /* Persistence.swift in Sources */,
 				7C042A952724DD9400EA32EE /* SearchAPI.swift in Sources */,
 				7CD198CE2724350A007FE4F6 /* ContentView.swift in Sources */,
 				7CD198EA27243AE7007FE4F6 /* TeamView.swift in Sources */,
+				7CCA8C3F2729497A00F88DE7 /* FavoritesView.swift in Sources */,
 				7CD198E2272437CE007FE4F6 /* Player.swift in Sources */,
 				7CD198CC2724350A007FE4F6 /* FootballSearchApp.swift in Sources */,
 				7C7CD3B42724B3C00060C675 /* API+Publisher.swift in Sources */,
+				7CCA8C4127294F6A00F88DE7 /* PlayerFavoriteButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

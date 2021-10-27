@@ -9,7 +9,13 @@ import Foundation
 import API
 import CoreData
 
-class Player: ObservableObject, APIIdentifiable, Identifiable {
+protocol PlayerProtocol {
+    var name: String { get }
+    var age: String { get }
+    var club: String { get }
+}
+
+class Player: ObservableObject, APIIdentifiable, PlayerProtocol, Identifiable {
     
     var id: String {
         playerID
@@ -18,10 +24,10 @@ class Player: ObservableObject, APIIdentifiable, Identifiable {
     let playerID: String
     let playerFirstName: String
     let playerSecondName: String
-    let playerAge: String
-    let playerClub: String
+    let age: String
+    let club: String
     
-    var playerName: String {
+    var name: String {
         playerFirstName + playerSecondName
     }
     
@@ -30,13 +36,13 @@ class Player: ObservableObject, APIIdentifiable, Identifiable {
     init(playerID: String,
          playerFirstName: String,
          playerSecondName: String,
-         playerAge: String,
-         playerClub: String) {
+         age: String,
+         club: String) {
         self.playerID = playerID
         self.playerFirstName = playerFirstName
         self.playerSecondName = playerSecondName
-        self.playerAge = playerAge
-        self.playerClub = playerClub
+        self.age = age
+        self.club = club
     }
     
     enum CodingKeys: String, CodingKey {
@@ -52,8 +58,8 @@ class Player: ObservableObject, APIIdentifiable, Identifiable {
         playerID = try container.decode(String.self, forKey: .playerID)
         playerFirstName = try container.decode(String.self, forKey: .playerFirstName)
         playerSecondName = try container.decode(String.self, forKey: .playerSecondName)
-        playerAge = try container.decode(String.self, forKey: .playerAge)
-        playerClub = try container.decode(String.self, forKey: .playerClub)
+        age = try container.decode(String.self, forKey: .playerAge)
+        club = try container.decode(String.self, forKey: .playerClub)
     }
     
 }
@@ -65,8 +71,24 @@ extension PlayerEntity {
         playerID = player.playerID
         playerFirstName = player.playerFirstName
         playerSecondName = player.playerSecondName
-        playerAge = player.playerAge
-        playerClub = player.playerClub
+        playerAge = player.age
+        playerClub = player.club
+    }
+    
+}
+
+extension PlayerEntity: PlayerProtocol {
+    
+    var name: String {
+        (playerFirstName ?? "") + (playerSecondName ?? "")
+    }
+    
+    var age: String {
+        playerAge ?? ""
+    }
+    
+    var club: String {
+        playerClub ?? ""
     }
     
 }

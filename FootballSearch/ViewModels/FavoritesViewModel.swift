@@ -9,13 +9,26 @@ import Foundation
 import SwiftUI
 import CoreData
 
-class FavoritesViewModel {
+class FavoritesViewModel: ObservableObject {
     
     static let shared = FavoritesViewModel()
     
-    private var players: [PlayerEntity] = []
+    @Published var players: [PlayerEntity] = []
+    @Published var teams: [TeamEntity] = []
+    
+    var isEmpty: Bool {
+        isPlayersEmpty && isTeamsEmpty
+    }
+    
+    var isPlayersEmpty: Bool {
+        players.isEmpty
+    }
+    
+    var isTeamsEmpty: Bool {
+        teams.isEmpty
+    }
 
-    private var teams: [TeamEntity] = []
+    @Published var showingAlert = false
 
     init() {
         let playersRequest = NSFetchRequest<PlayerEntity>(entityName: "PlayerEntity")
@@ -25,6 +38,7 @@ class FavoritesViewModel {
             teams = try PersistenceController.shared.container.viewContext.fetch(teamsRequest)
         } catch {
             print(error.localizedDescription)
+            showingAlert = true
         }
     }
     
@@ -56,33 +70,35 @@ class FavoritesViewModel {
         return teams.contains(where: { $0.teamID == team.teamID })
     }
     
-    func removePlayer(player: Player) throws {
+    func removePlayer(player: Player) {
         guard let index = players.firstIndex(where: {$0.playerID == player.playerID }) else { return }
-        try removePlayer(at: index)
+        removePlayer(at: index)
     }
     
-    func removePlayer(at index: Int) throws {
+    func removePlayer(at index: Int) {
         PersistenceController.shared.container.viewContext.delete(players[index])
         do {
             try PersistenceController.shared.container.viewContext.save()
             players.remove(at: index)
         } catch {
-            throw error
+            print(error.localizedDescription)
+            showingAlert = true
         }
     }
     
-    func removeTeam(team: Team) throws {
+    func removeTeam(team: Team) {
         guard let index = teams.firstIndex(where: {$0.teamID == team.teamID }) else { return }
-        try removeTeam(at: index)
+        removeTeam(at: index)
     }
     
-    func removeTeam(at index: Int) throws {
+    func removeTeam(at index: Int) {
         PersistenceController.shared.container.viewContext.delete(teams[index])
         do {
             try PersistenceController.shared.container.viewContext.save()
             teams.remove(at: index)
         } catch {
             print(error.localizedDescription)
+            showingAlert = true
         }
     }
     

@@ -18,7 +18,8 @@ class SearchViewMdoel: ObservableObject {
     @Published var players: [Player] = []
     @Published var teams: [Team] = []
     @Published var isBusy = false
-    
+    @Published var showingAlert = false
+
     private var cancellables: Set<AnyCancellable> = []
     
     var shouldShowEmptyView: Bool {
@@ -35,6 +36,44 @@ class SearchViewMdoel: ObservableObject {
     
     var isTeamsEmpty: Bool {
         teamsViewModel.isDataEmpty
+    }
+    
+    init() {
+        searchedTextListener.$debouncedText.sink { [weak self] text in
+            self?.searchPlayers(searchText: text)
+            self?.searchTeams(searchText: text)
+        }
+        .store(in: &cancellables)
+        playersViewModel.$data.sink { [weak self] data in
+            self?.players = data
+        }
+        .store(in: &cancellables)
+        teamsViewModel.$data.sink { [weak self] data in
+            self?.teams = data
+        }
+        .store(in: &cancellables)
+        playersViewModel.$isBusy.sink { [weak self] isBusy in
+            self?.isBusy = isBusy
+        }
+        .store(in: &cancellables)
+        
+        playersViewModel.handleError = { [weak self] error in
+            if self?.showingAlert ?? false {
+                self?.showingAlert = false
+            }
+            self?.showingAlert = true
+        }
+        teamsViewModel.handleError = { [weak self] error in
+            if self?.showingAlert ?? false {
+                self?.showingAlert = false
+            }
+            self?.showingAlert = true
+        }
+    }
+    
+    func reloadData() {
+        playersViewModel.reloadData()
+        teamsViewModel.reloadData()
     }
     
     func searchPlayers(searchText: String, shouldReset: Bool = true) {
@@ -56,7 +95,7 @@ class SearchViewMdoel: ObservableObject {
     func handleFavorite(player: Player) {
         do {
             if player.favorited {
-                try FavoritesViewModel.shared.removePlayer(player: player)
+                FavoritesViewModel.shared.removePlayer(player: player)
                 player.favorited = false
             } else {
                 try FavoritesViewModel.shared.add(player: player)
@@ -64,13 +103,14 @@ class SearchViewMdoel: ObservableObject {
             }
         } catch {
             print(error.localizedDescription)
+            showingAlert = true
         }
     }
     
     func handleFavorite(team: Team) {
         do {
             if team.favorited {
-                try FavoritesViewModel.shared.removeTeam(team: team)
+                FavoritesViewModel.shared.removeTeam(team: team)
                 team.favorited = false
             } else {
                 try FavoritesViewModel.shared.add(team: team)
@@ -78,27 +118,8 @@ class SearchViewMdoel: ObservableObject {
             }
         } catch {
             print(error.localizedDescription)
+            showingAlert = true
         }
-    }
-    
-    init() {
-        searchedTextListener.$debouncedText.sink { [weak self] text in
-            self?.searchPlayers(searchText: text)
-            self?.searchTeams(searchText: text)
-        }
-        .store(in: &cancellables)
-        playersViewModel.$data.sink { [weak self] data in
-            self?.players = data
-        }
-        .store(in: &cancellables)
-        teamsViewModel.$data.sink { [weak self] data in
-            self?.teams = data
-        }
-        .store(in: &cancellables)
-        playersViewModel.$isBusy.sink { [weak self] isBusy in
-            self?.isBusy = isBusy
-        }
-        .store(in: &cancellables)
     }
     
 }

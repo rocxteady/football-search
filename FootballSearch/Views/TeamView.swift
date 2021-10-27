@@ -9,26 +9,33 @@ import SwiftUI
 
 struct TeamView: View {
     
-    @ObservedObject var team: Team
-    let action: () -> Void
+    var team: TeamProtocol
+    let action: (() -> Void)?
+    
+    init(team: TeamProtocol,
+         action: (() -> Void)? = nil) {
+        self.team = team
+        self.action = action
+    }
 
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(team.teamName)
-                Text("City " + team.teamCity)
-                Text("Stadium " + team.teamStadium)
+                Text(team.name)
+                Text("City " + team.city)
+                Text("Stadium " + team.stadium)
             }
             Spacer()
-            Button(action: action, label: {
-                Image(systemName: team.favorited ? "heart.fill" : "heart")
-            })
+            if let team = team as? Team,
+               let action = action {
+                TeamFavoriteButton(team: team, action: action)
+            }
         }
     }
 }
 
 struct TeamView_Previews: PreviewProvider {
     static var previews: some View {
-        TeamView(team: Team(teamID: "0", teamName: "Trabzonspor", teamCity: "Trabzon", teamStadium: "Şenol Güneş"), action: {})
+        TeamView(team: Team(teamID: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş"), action: {})
     }
 }

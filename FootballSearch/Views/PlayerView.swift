@@ -9,28 +9,35 @@ import SwiftUI
 
 struct PlayerView: View {
     
-    @ObservedObject var player: Player
-    let action: () -> Void
+    var player: PlayerProtocol
+    let action: (() -> Void)?
+    
+    init(player: PlayerProtocol,
+         action: (() -> Void)? = nil) {
+        self.player = player
+        self.action = action
+    }
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(player.playerName)
+                Text(player.name)
                 HStack(spacing: 32) {
-                    Text("Age " + player.playerAge)
-                    Text("Club " + player.playerClub)
+                    Text("Age " + player.age)
+                    Text("Club " + player.club)
                 }
             }
             Spacer()
-            Button(action: action, label: {
-                Image(systemName: player.favorited ? "heart.fill" : "heart")
-            })
+            if let player = player as? Player,
+               let action = action{
+                PlayerFavoriteButton(player: player, action: action)
+            }
         }
     }
 }
 
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerView(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", playerAge: "33", playerClub: "Sancak"), action: {})
+        PlayerView(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", age: "33", club: "Sancak"), action: {})
     }
 }
