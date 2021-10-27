@@ -56,11 +56,8 @@ struct SearchView: View {
                     }
                 }
             }
-            .searchable(text: $viewModel.searchedTextListener.searchedText)
             .navigationTitle("Football Search")
-            .onAppear {
-                viewModel.reloadData()
-            }
+            .searchable(text: $viewModel.searchedTextListener.searchedText)
             .alert("Error", isPresented: $viewModel.showingAlert, actions: {
                 Button("OK", role: .cancel) {}
             }, message: {

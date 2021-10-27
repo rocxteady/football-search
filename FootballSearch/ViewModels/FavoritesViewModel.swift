@@ -15,7 +15,9 @@ class FavoritesViewModel: ObservableObject {
     
     @Published var players: [PlayerEntity] = []
     @Published var teams: [TeamEntity] = []
-    
+    var removedPlayer: (_ playerID: String) -> () = { _ in }
+    var removedTeam: (_ teamID: String) -> () = { _ in }
+
     var isEmpty: Bool {
         isPlayersEmpty && isTeamsEmpty
     }
@@ -76,10 +78,13 @@ class FavoritesViewModel: ObservableObject {
     }
     
     func removePlayer(at index: Int) {
+        let player = players[index]
+        let playerID = player.playerID ?? ""
         PersistenceController.shared.container.viewContext.delete(players[index])
         do {
             try PersistenceController.shared.container.viewContext.save()
             players.remove(at: index)
+            removedPlayer(playerID)
         } catch {
             print(error.localizedDescription)
             showingAlert = true
@@ -92,10 +97,13 @@ class FavoritesViewModel: ObservableObject {
     }
     
     func removeTeam(at index: Int) {
-        PersistenceController.shared.container.viewContext.delete(teams[index])
+        let team = teams[index]
+        let teamID = team.teamID ?? ""
+        PersistenceController.shared.container.viewContext.delete(team)
         do {
             try PersistenceController.shared.container.viewContext.save()
             teams.remove(at: index)
+            removedTeam(teamID)
         } catch {
             print(error.localizedDescription)
             showingAlert = true

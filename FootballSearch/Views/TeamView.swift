@@ -20,6 +20,10 @@ struct TeamView: View {
 
     var body: some View {
         HStack {
+            countryImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 25)
             VStack(alignment: .leading) {
                 Text(team.name)
                 Text("City " + team.city)
@@ -32,10 +36,19 @@ struct TeamView: View {
             }
         }
     }
+    
+    private var countryImage: Image {
+        if let imageName = team.countryImageName {
+            return Image(imageName)
+        } else {
+            return Image(systemName: "rectangle.slash")
+        }
+    }
+    
 }
 
 struct TeamView_Previews: PreviewProvider {
     static var previews: some View {
-        TeamView(team: Team(teamID: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş"), action: {})
+        TeamView(team: Team(teamID: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş", teamNationality: "Turkey"), action: {})
     }
 }

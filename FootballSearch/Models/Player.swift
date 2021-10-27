@@ -13,6 +13,7 @@ protocol PlayerProtocol {
     var name: String { get }
     var age: String { get }
     var club: String { get }
+    var countryImageName: String? { get }
 }
 
 class Player: ObservableObject, APIIdentifiable, PlayerProtocol, Identifiable {
@@ -26,9 +27,14 @@ class Player: ObservableObject, APIIdentifiable, PlayerProtocol, Identifiable {
     let playerSecondName: String
     let age: String
     let club: String
+    let playerNationality: String
     
     var name: String {
         playerFirstName + playerSecondName
+    }
+    
+    var countryImageName: String? {
+        FlagName.imageNameBy(nationality: playerNationality)
     }
     
     @Published var favorited: Bool = false
@@ -37,12 +43,14 @@ class Player: ObservableObject, APIIdentifiable, PlayerProtocol, Identifiable {
          playerFirstName: String,
          playerSecondName: String,
          age: String,
-         club: String) {
+         club: String,
+         playerNationality: String) {
         self.playerID = playerID
         self.playerFirstName = playerFirstName
         self.playerSecondName = playerSecondName
         self.age = age
         self.club = club
+        self.playerNationality = playerNationality
     }
     
     enum CodingKeys: String, CodingKey {
@@ -51,6 +59,7 @@ class Player: ObservableObject, APIIdentifiable, PlayerProtocol, Identifiable {
         case playerSecondName
         case playerAge
         case playerClub
+        case playerNationality
     }
     
     required init(from decoder: Decoder) throws {
@@ -60,6 +69,7 @@ class Player: ObservableObject, APIIdentifiable, PlayerProtocol, Identifiable {
         playerSecondName = try container.decode(String.self, forKey: .playerSecondName)
         age = try container.decode(String.self, forKey: .playerAge)
         club = try container.decode(String.self, forKey: .playerClub)
+        playerNationality = try container.decode(String.self, forKey: .playerNationality)
     }
     
 }
@@ -73,6 +83,7 @@ extension PlayerEntity {
         playerSecondName = player.playerSecondName
         playerAge = player.age
         playerClub = player.club
+        playerNationality = player.playerNationality
     }
     
 }
@@ -89,6 +100,11 @@ extension PlayerEntity: PlayerProtocol {
     
     var club: String {
         playerClub ?? ""
+    }
+    
+    var countryImageName: String? {
+        guard let playerNationality = playerNationality else { return nil }
+        return FlagName.imageNameBy(nationality: playerNationality)
     }
     
 }

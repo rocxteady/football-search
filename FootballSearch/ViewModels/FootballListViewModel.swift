@@ -15,6 +15,8 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
     @Published var data: [T] = []
     @Published var isBusy = false
     
+    private let favoritesViewModel = FavoritesViewModel.shared
+    
     private var offset = -10
     private var searchCancellable: AnyCancellable? {
         willSet {
@@ -28,12 +30,20 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
     
     var handleError: (_ error: String) -> Void = { _ in }
     
-    func reloadData() {
-        data.forEach { object in
-            if let player = object as? Player {
-                player.favorited = FavoritesViewModel.shared.isFavorited(player: player)
-            } else if let team = object as? Team {
-                team.favorited = FavoritesViewModel.shared.isFavorited(team: team)
+    init() {
+        if T.self == Player.self {
+            favoritesViewModel.removedPlayer = { [weak self] playerID in
+                guard let player = self?.data.first(where: { $0.id == playerID }) as? Player else {
+                    return
+                }
+                player.favorited = false
+            }
+        } else if T.self == Team.self {
+            favoritesViewModel.removedTeam = { [weak self] teamID in
+                guard let team = self?.data.first(where: { $0.id == teamID }) as? Team else {
+                    return
+                }
+                team.favorited = false
             }
         }
     }

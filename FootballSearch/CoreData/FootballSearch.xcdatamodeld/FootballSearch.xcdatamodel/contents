@@ -5,16 +5,18 @@
         <attribute name="playerClub" attributeType="String"/>
         <attribute name="playerFirstName" attributeType="String"/>
         <attribute name="playerID" attributeType="String"/>
+        <attribute name="playerNationality" optional="YES" attributeType="String"/>
         <attribute name="playerSecondName" attributeType="String"/>
     </entity>
     <entity name="TeamEntity" representedClassName="TeamEntity" syncable="YES" codeGenerationType="class">
         <attribute name="teamCity" attributeType="String"/>
         <attribute name="teamID" attributeType="String"/>
         <attribute name="teamName" attributeType="String"/>
+        <attribute name="teamNationality" optional="YES" attributeType="String"/>
         <attribute name="teamStadium" attributeType="String"/>
     </entity>
     <elements>
-        <element name="PlayerEntity" positionX="-63" positionY="-9" width="128" height="104"/>
-        <element name="TeamEntity" positionX="-54" positionY="0" width="128" height="89"/>
+        <element name="PlayerEntity" positionX="-63" positionY="-9" width="128" height="119"/>
+        <element name="TeamEntity" positionX="-54" positionY="0" width="128" height="104"/>
     </elements>
 </model>

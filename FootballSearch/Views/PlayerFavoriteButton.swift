@@ -21,6 +21,6 @@ struct PlayerFavoriteButton: View {
 
 struct PlayerFavoriteButton_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerFavoriteButton(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", age: "33", club: "Sancak"), action: {})
+        PlayerFavoriteButton(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", age: "33", club: "Sancak", playerNationality: "Turkey"), action: {})
     }
 }

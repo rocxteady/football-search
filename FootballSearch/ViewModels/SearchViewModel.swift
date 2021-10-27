@@ -45,11 +45,15 @@ class SearchViewMdoel: ObservableObject {
         }
         .store(in: &cancellables)
         playersViewModel.$data.sink { [weak self] data in
-            self?.players = data
+            withAnimation {
+                self?.players = data
+            }
         }
         .store(in: &cancellables)
         teamsViewModel.$data.sink { [weak self] data in
-            self?.teams = data
+            withAnimation {
+                self?.teams = data
+            }
         }
         .store(in: &cancellables)
         playersViewModel.$isBusy.sink { [weak self] isBusy in
@@ -69,11 +73,6 @@ class SearchViewMdoel: ObservableObject {
             }
             self?.showingAlert = true
         }
-    }
-    
-    func reloadData() {
-        playersViewModel.reloadData()
-        teamsViewModel.reloadData()
     }
     
     func searchPlayers(searchText: String, shouldReset: Bool = true) {

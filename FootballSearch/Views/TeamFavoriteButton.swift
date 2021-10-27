@@ -21,6 +21,6 @@ struct TeamFavoriteButton: View {
 
 struct TeamFavoriteButton_Previews: PreviewProvider {
     static var previews: some View {
-        TeamFavoriteButton(team: Team(teamID: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş"), action: {})
+        TeamFavoriteButton(team: Team(teamID: "0", name: "Trabzonspor", city: "Trabzon", stadium: "Şenol Güneş", teamNationality: "Turkey"), action: {})
     }
 }

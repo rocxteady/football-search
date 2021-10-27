@@ -20,6 +20,10 @@ struct PlayerView: View {
     
     var body: some View {
         HStack {
+            countryImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 25)
             VStack(alignment: .leading) {
                 Text(player.name)
                 HStack(spacing: 32) {
@@ -34,10 +38,19 @@ struct PlayerView: View {
             }
         }
     }
+    
+    private var countryImage: Image {
+        if let imageName = player.countryImageName {
+            return Image(imageName)
+        } else {
+            return Image(systemName: "rectangle.slash")
+        }
+    }
+    
 }
 
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerView(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", age: "33", club: "Sancak"), action: {})
+        PlayerView(player: Player(playerID: "0", playerFirstName: "Ulaş", playerSecondName: "Sancak", age: "33", club: "Sancak", playerNationality: "Turkey"), action: {})
     }
 }

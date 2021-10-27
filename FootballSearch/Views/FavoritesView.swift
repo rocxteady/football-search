@@ -10,7 +10,8 @@ import SwiftUI
 struct FavoritesView: View {
     
     @ObservedObject var viewModel = FavoritesViewModel.shared
-    
+    @State private var editingMode: EditMode = .inactive
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -42,7 +43,12 @@ struct FavoritesView: View {
                 }
             }
             .navigationTitle("Favorites")
+            .navigationBarItems(
+                trailing:
+                    EditButton()
+            )
         }
+        .environment(\.editMode, $editingMode)
     }
 }
 
