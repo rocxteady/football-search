@@ -19,6 +19,8 @@ class SearchViewMdoel: ObservableObject {
     @Published var teams: [Team] = []
     @Published var isBusy = false
     @Published var showingAlert = false
+    @Published var isPlayersCompleted = false
+    @Published var isTeamsCompeleted = false
 
     private var cancellables: Set<AnyCancellable> = []
     
@@ -57,17 +59,35 @@ class SearchViewMdoel: ObservableObject {
         }
         .store(in: &cancellables)
         playersViewModel.$isBusy.sink { [weak self] isBusy in
-            self?.isBusy = isBusy
+            self?.isBusy = isBusy || self?.teamsViewModel.isBusy ?? false
         }
         .store(in: &cancellables)
-        
+        teamsViewModel.$isBusy.sink { [weak self] isBusy in
+            self?.isBusy = isBusy || self?.playersViewModel.isBusy ?? false
+        }
+        .store(in: &cancellables)
+        playersViewModel.$isCompleted.sink { [weak self] isCompleted in
+            withAnimation {
+                self?.isPlayersCompleted = isCompleted
+            }
+        }
+        .store(in: &cancellables)
+        teamsViewModel.$isCompleted.sink { [weak self] isCompleted in
+            withAnimation {
+                self?.isTeamsCompeleted = isCompleted
+            }
+        }
+        .store(in: &cancellables)
+
         playersViewModel.handleError = { [weak self] error in
+            print(error)
             if self?.showingAlert ?? false {
                 self?.showingAlert = false
             }
             self?.showingAlert = true
         }
         teamsViewModel.handleError = { [weak self] error in
+            print(error)
             if self?.showingAlert ?? false {
                 self?.showingAlert = false
             }

@@ -15,6 +15,8 @@ class FavoritesViewModel: ObservableObject {
     
     @Published var players: [PlayerEntity] = []
     @Published var teams: [TeamEntity] = []
+    @Published var showingAlert = false
+    
     var removedPlayer: (_ playerID: String) -> () = { _ in }
     var removedTeam: (_ teamID: String) -> () = { _ in }
 
@@ -29,8 +31,6 @@ class FavoritesViewModel: ObservableObject {
     var isTeamsEmpty: Bool {
         teams.isEmpty
     }
-
-    @Published var showingAlert = false
 
     init() {
         let playersRequest = NSFetchRequest<PlayerEntity>(entityName: "PlayerEntity")

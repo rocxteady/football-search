@@ -22,22 +22,22 @@ class Player: ObservableObject, APIIdentifiable, PlayerProtocol, Identifiable {
         playerID
     }
     
+    var countryImageName: String? {
+        FlagName.imageNameBy(nationality: playerNationality)
+    }
+    
+    var name: String {
+        playerFirstName + playerSecondName
+    }
+    
+    @Published var favorited: Bool = false
+    
     let playerID: String
     let playerFirstName: String
     let playerSecondName: String
     let age: String
     let club: String
     let playerNationality: String
-    
-    var name: String {
-        playerFirstName + playerSecondName
-    }
-    
-    var countryImageName: String? {
-        FlagName.imageNameBy(nationality: playerNationality)
-    }
-    
-    @Published var favorited: Bool = false
     
     init(playerID: String,
          playerFirstName: String,

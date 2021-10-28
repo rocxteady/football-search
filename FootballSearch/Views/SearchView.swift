@@ -25,12 +25,14 @@ struct SearchView: View {
                                         viewModel.handleFavorite(player: player)
                                     }
                                 }
-                                HStack {
-                                    Spacer()
-                                    Button("More") {
-                                        viewModel.morePlayers()
+                                if !viewModel.isPlayersCompleted {
+                                    HStack {
+                                        Spacer()
+                                        Button("More") {
+                                            viewModel.morePlayers()
+                                        }
+                                        Spacer()
                                     }
-                                    Spacer()
                                 }
                             }
                         }
@@ -41,12 +43,14 @@ struct SearchView: View {
                                         viewModel.handleFavorite(team: team)
                                     }
                                 }
-                                HStack {
-                                    Spacer()
-                                    Button("More") {
-                                        viewModel.moreTeams()
+                                if !viewModel.isTeamsCompeleted {
+                                    HStack {
+                                        Spacer()
+                                        Button("More") {
+                                            viewModel.moreTeams()
+                                        }
+                                        Spacer()
                                     }
-                                    Spacer()
                                 }
                             }
                         }

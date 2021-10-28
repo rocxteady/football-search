@@ -26,9 +26,14 @@ public extension API {
             switch response {
             case .success(let data):
                 do {
-                    let responseModel: ResponseModel = try data.toDecodable()
-                    apiResponse.responseModel = responseModel
-                    apiResponse.success = true
+                    let baseResponseModel: BaseResponseModel = try data.toDecodable()
+                    if baseResponseModel.result.status {
+                        let responseModel: ResponseModel = try data.toDecodable()
+                        apiResponse.responseModel = responseModel
+                        apiResponse.success = true
+                    } else {
+                        apiResponse.error = NSError(domain: Properties.domain, code: -1, userInfo: [NSLocalizedDescriptionKey: baseResponseModel.result.message])
+                    }
                 } catch let error {
                     apiResponse.error = error
                 }

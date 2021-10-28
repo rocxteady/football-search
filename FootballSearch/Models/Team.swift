@@ -23,17 +23,17 @@ class Team: ObservableObject, APIIdentifiable, TeamProtocol, Identifiable {
         teamID
     }
     
+    var countryImageName: String? {
+        FlagName.imageNameBy(country: teamNationality)
+    }
+    
+    @Published var favorited: Bool = false
+
     let teamID: String
     let name :String
     let city: String
     let stadium :String
     let teamNationality: String
-    
-    var countryImageName: String? {
-        FlagName.imageNameBy(country: teamNationality)
-    }
-
-    @Published var favorited: Bool = false
     
     init(teamID: String,
          name: String,

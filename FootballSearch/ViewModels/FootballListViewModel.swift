@@ -14,21 +14,21 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
     
     @Published var data: [T] = []
     @Published var isBusy = false
-    
-    private let favoritesViewModel = FavoritesViewModel.shared
-    
-    private var offset = -10
-    private var searchCancellable: AnyCancellable? {
-        willSet {
-            searchCancellable?.cancel()
-        }
-    }
+    @Published var isCompleted = false
+    var handleError: (_ error: String) -> Void = { _ in }
     
     var isDataEmpty: Bool {
         data.isEmpty
     }
     
-    var handleError: (_ error: String) -> Void = { _ in }
+    private let favoritesViewModel = FavoritesViewModel.shared
+    private var offset = -10
+    
+    private var searchCancellable: AnyCancellable? {
+        willSet {
+            searchCancellable?.cancel()
+        }
+    }
     
     init() {
         if T.self == Player.self {
@@ -79,6 +79,9 @@ class FootballListViewModel<T: APIIdentifiable>: ObservableObject {
                 self?.data = data
             } else {
                 self?.data.append(contentsOf: response.result.data)
+            }
+            if data.isEmpty {
+                self?.isCompleted = true
             }
         }
     }
