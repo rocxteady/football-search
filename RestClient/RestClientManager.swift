@@ -46,7 +46,7 @@ extension RestClientManager {
         }
         state = .running
         task = Task {
-            return try await session.data(for: realRequest)
+             try await session.data(for: realRequest)
         }
         do {
             let sessionResponse = try await task?.value

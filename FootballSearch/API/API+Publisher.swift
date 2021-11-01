@@ -34,14 +34,16 @@ extension Publishers {
             guard let subscriber = subscriber else { return }
             Task {
                 let response = await api.start()
-                if let error = response.error {
-                    subscriber.receive(completion: .failure(error))
-                } else if let responseModel = response.responseModel {
-                    _ = subscriber.receive(responseModel)
-                    subscriber.receive(completion: .finished)
-                } else {
-                    subscriber.receive(completion: .failure(RestError.unknown))
-                }
+                await MainActor.run(body: {
+                    if let error = response.error {
+                        subscriber.receive(completion: .failure(error))
+                    } else if let responseModel = response.responseModel {
+                        _ = subscriber.receive(responseModel)
+                        subscriber.receive(completion: .finished)
+                    } else {
+                        subscriber.receive(completion: .failure(RestError.unknown))
+                    }
+                })
             }
         }
         
