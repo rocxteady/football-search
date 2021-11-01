@@ -32,7 +32,8 @@ extension Publishers {
                 
         private func start() {
             guard let subscriber = subscriber else { return }
-            api.start { response in
+            Task {
+                let response = await api.start()
                 if let error = response.error {
                     subscriber.receive(completion: .failure(error))
                 } else if let responseModel = response.responseModel {

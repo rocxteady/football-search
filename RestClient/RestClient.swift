@@ -8,8 +8,6 @@
 
 import Foundation
 
-typealias BasicCompletion = (_ error: Error?) -> Void
-
 /// The states of the requets.
 public enum RestClientState: Int {
     
@@ -43,7 +41,7 @@ public protocol RestEndpointProtocol {
     var parameters: [String: Any]? { get }
     var headers: [String: String]? { get }
     
-    func start(completion: @escaping RestClientResponse)
+    func start() async -> Result<Data, RestError>
     func end()
 }
 
@@ -67,9 +65,9 @@ open class RestEndpoint: RestEndpointProtocol {
     public var headers: [String : String]?
     
     /// Start the request.
-    /// - Parameter completion: Completion block
-    public func start(completion: @escaping RestClientResponse) {
-        restClientManager.start(endpoint: self, completion: completion)
+    /// - Returns: Result
+    public func start() async -> Result<Data, RestError> {
+        await restClientManager.start(endpoint: self)
     }
     
     /// End the request.

@@ -8,9 +8,6 @@
 
 import Foundation
 
-/// Manager completion block
-public typealias RestClientResponse = (Result<Data, RestError>) -> ()
-
 /// Manager which use RestEntpoint instance to start the request with URLSession. It controls the session. It can start and end the request.
 internal class RestClientManager {
     
@@ -22,7 +19,9 @@ internal class RestClientManager {
     internal var state: RestClientState = .idle
     
     /// The URLSessionTask instance of current request.
-    internal var task: URLSessionTask?
+//    internal var task: URLSessionTask?
+    
+    internal var task: Task<(Data, URLResponse), Error>?
     
 }
 
@@ -32,43 +31,41 @@ extension RestClientManager {
     /// - Parameters:
     ///   - endpoint: RestEndPoint instance
     ///   - completion: Comploetion block which has data and/or error
-    func start(endpoint: RestEndpoint, completion: @escaping RestClientResponse) {
+    /// - Returns: Result
+    func start(endpoint: RestEndpoint) async -> Result<Data, RestError> {
         var request: URLRequest?
         do {
             request = try endpoint.createRequest()
         } catch let error {
             state = .suspended
-            completion(.failure(RestError.urlSession(error: error)))
-            return
+            return .failure(RestError.urlSession(error: error))
         }
         guard let realRequest = request else {
             state = .suspended
-            completion(.failure(RestError.unknown))
-            return
-        }
-        task = session.dataTask(with: realRequest) { [weak self] (data, response, error) in
-            DispatchQueue.main.async {
-                if let error = error {
-                    self?.state = .suspended
-                    let error = error as NSError
-                    if error.code == NSURLErrorCancelled {
-                        completion(.failure(RestError.cancelled))
-                    } else {
-                        completion(.failure(RestError.urlSession(error: error)))
-                    }
-                }
-                else if let data = data {
-                    self?.state = .completed
-                    completion(.success(data))
-                }
-                else {
-                    self?.state = .suspended
-                    completion(.failure(RestError.unknown))
-                }
-            }
+            return .failure(RestError.unknown)
         }
         state = .running
-        task?.resume()
+        task = Task {
+            return try await session.data(for: realRequest)
+        }
+        do {
+            let sessionResponse = try await task?.value
+            if let data = sessionResponse?.0 {
+                state = .completed
+                return .success(data)
+            } else {
+                state = .suspended
+                return .failure(RestError.unknown)
+            }
+        } catch {
+            state = .suspended
+            let error = error as NSError
+            if error.code == NSURLErrorCancelled {
+                return .failure(RestError.cancelled)
+            } else {
+                return .failure(RestError.urlSession(error: error))
+            }
+        }
     }
     
     /// End the manager
