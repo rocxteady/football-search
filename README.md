@@ -6,7 +6,7 @@ Project provides searching football teams and players and listing them.  These a
 
 Project consuming http://trials.mtcmobile.co.uk/api for data source.
 
-## Sample Video
+![Usage Example](sample.gif)
 
 ## Technical Features
 - Using SwiftUI as interface building.
